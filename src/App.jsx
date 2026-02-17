@@ -1,12 +1,12 @@
 import "./App.css";
 import { useState } from "react";
 
-function Square({ value, onSquareClick, disabled, isWinning, winType }) {
+function Square({ value, onSquareClick, disabled, isWinning }) {
   return (
     <button
       className={`square
         ${disabled ? "disabled-square" : ""}
-        ${isWinning ? `win ${winType}` : ""}
+        ${isWinning ? "win-square" : ""}
       `}
       onClick={onSquareClick}
       disabled={disabled}
@@ -30,16 +30,16 @@ export default function App() {
 
   function calculateWinner(board) {
     const lines = [
-      { cells:[[0,0],[0,1],[0,2]], type:"row" },
-      { cells:[[1,0],[1,1],[1,2]], type:"row" },
-      { cells:[[2,0],[2,1],[2,2]], type:"row" },
+      { cells:[[0,0],[0,1],[0,2]], type:"row", index:0 },
+      { cells:[[1,0],[1,1],[1,2]], type:"row", index:1 },
+      { cells:[[2,0],[2,1],[2,2]], type:"row", index:2 },
 
-      { cells:[[0,0],[1,0],[2,0]], type:"col" },
-      { cells:[[0,1],[1,1],[2,1]], type:"col" },
-      { cells:[[0,2],[1,2],[2,2]], type:"col" },
+      { cells:[[0,0],[1,0],[2,0]], type:"col", index:0 },
+      { cells:[[0,1],[1,1],[2,1]], type:"col", index:1 },
+      { cells:[[0,2],[1,2],[2,2]], type:"col", index:2 },
 
-      { cells:[[0,0],[1,1],[2,2]], type:"diag1" },
-      { cells:[[0,2],[1,1],[2,0]], type:"diag2" }
+      { cells:[[0,0],[1,1],[2,2]], type:"diag1", index:0 },
+      { cells:[[0,2],[1,1],[2,0]], type:"diag2", index:0 }
     ];
 
     for (let line of lines) {
@@ -53,11 +53,11 @@ export default function App() {
         return {
           player: board[a1][a2],
           cells: line.cells,
-          type: line.type
+          type: line.type,
+          index: line.index
         };
       }
     }
-
     return null;
   }
 
@@ -74,9 +74,9 @@ export default function App() {
     if (win) {
       setStatus(win.player);
       setWinningInfo(win);
+    } else {
+      setXIsNext(!xIsNext);
     }
-
-    setXIsNext(!xIsNext);
   }
 
   function restartGame() {
@@ -92,33 +92,40 @@ export default function App() {
 
         <div className={`status ${status ? "win-text" : ""}`}>
           {status
-            ? `Winner: ${status}`
+            ? `🎉 Winner: ${status}`
             : `Next Player: ${xIsNext ? "X" : "O"}`}
         </div>
 
-        {squares.map((row, i) => (
-          <div className="board-row" key={i}>
-            {row.map((cell, j) => (
-              <Square
-                key={j}
-                value={cell}
-                onSquareClick={() => handleClick(i, j)}
-                disabled={status || cell !== null}
-                winType={winningInfo?.type}
-                isWinning={winningInfo?.cells.some(
-                  ([r,c]) => r===i && c===j
-                )}
-              />
-            ))}
-          </div>
-        ))}
+        <div className="board-wrapper">
+
+          {winningInfo && (
+            <div
+              className={`win-line ${winningInfo.type} pos-${winningInfo.index}`}
+            />
+          )}
+
+          {squares.map((row, i) => (
+            <div className="board-row" key={i}>
+              {row.map((cell, j) => (
+                <Square
+                  key={j}
+                  value={cell}
+                  onSquareClick={() => handleClick(i, j)}
+                  disabled={status || cell !== null}
+                  isWinning={winningInfo?.cells.some(
+                    ([r,c]) => r===i && c===j
+                  )}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
 
         {status && (
           <button onClick={restartGame} className="restart-button">
-            Restart Game
+            Play Again
           </button>
         )}
-
       </div>
     </div>
   );
