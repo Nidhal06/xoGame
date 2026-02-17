@@ -190,7 +190,7 @@ body {
 
 @keyframes growDiagonal {
   0% { width: 0; }
-  100% { width: 141%; /* sqrt(2) * 100% for diagonal */ }
+  100% { width: 141%; /* sqrt(2) ≈ 1.414 for diagonal across square */ }
 }
 
 /* Confetti celebration - ENHANCED */
@@ -258,7 +258,7 @@ body {
   100% { 
     top: 110%;
     opacity: 0;
-    transform: translateX(100px) rotate(360deg) scale(0.5);
+    transform: translateX(var(--tx, 100px)) rotate(360deg) scale(0.5);
   }
 }
 
