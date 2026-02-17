@@ -76,7 +76,7 @@ export default function App() {
 
         <div className="status">
           {winnerInfo
-            ? `🎉 Winner: ${winnerInfo.player}`
+            ? `🏆 Winner: ${winnerInfo.player} 🏆`
             : `Next Player: ${xIsNext ? "X" : "O"}`}
         </div>
 
@@ -106,9 +106,15 @@ export default function App() {
 
         {winnerInfo && (
           <>
-            <div className="confetti-container" />
+            <div className="confetti-container">
+              <div className="confetti-piece" style={{'--tx': '-100px', '--ty': '200px'}}>🎊</div>
+              <div className="confetti-piece" style={{'--tx': '100px', '--ty': '180px'}}>✨</div>
+              <div className="confetti-piece" style={{'--tx': '-80px', '--ty': '220px'}}>🎉</div>
+              <div className="confetti-piece" style={{'--tx': '120px', '--ty': '190px'}}>⭐</div>
+              <div className="confetti-piece" style={{'--tx': '-60px', '--ty': '240px'}}>💫</div>
+            </div>
             <button className="restart-button" onClick={restart}>
-              Play Again
+              🔄 Play Again
             </button>
           </>
         )}
